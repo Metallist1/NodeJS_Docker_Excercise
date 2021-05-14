@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  nodejs:
+    image: nodejs
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      CLOUDAMQP_URL: amqps://knonqsms:xhCosYXBsyLlHLadSlcUyzgfIz53B9AJ@rattlesnake.rmq.cloudamqp.com/knonqsms
+      PORT: 3000
+    ports:
+      - 3000:3000
+
+  customer:
+    image: customer
+    build:
+      context: .
+      dockerfile: ./microservices/customer/Dockerfile
+    environment:
+        NODE_ENV: production
+        CLOUDAMQP_URL: amqps://knonqsms:xhCosYXBsyLlHLadSlcUyzgfIz53B9AJ@rattlesnake.rmq.cloudamqp.com/knonqsms
+        PORT: 3001
+    ports:
+        - 3001:3001
+
+  order:
+    image: order
+    build:
+      context: .
+      dockerfile: ./microservices/order/Dockerfile
+    environment:
+        NODE_ENV: production
+        CLOUDAMQP_URL: amqps://knonqsms:xhCosYXBsyLlHLadSlcUyzgfIz53B9AJ@rattlesnake.rmq.cloudamqp.com/knonqsms
+        PORT: 3002
+    ports:
+        - 3002:3002
+
+  product:
+    image: product
+    build:
+      context: .
+      dockerfile: ./microservices/product/Dockerfile
+    environment:
+        NODE_ENV: production
+        CLOUDAMQP_URL: amqps://knonqsms:xhCosYXBsyLlHLadSlcUyzgfIz53B9AJ@rattlesnake.rmq.cloudamqp.com/knonqsms
+        PORT: 3003
+    ports:
+        - 3003:3003

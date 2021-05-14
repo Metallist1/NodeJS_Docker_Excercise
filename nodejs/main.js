@@ -8,6 +8,7 @@ const amqp = require('amqplib');
 const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json());
 
@@ -109,11 +110,11 @@ function consume({ connection, channel, resultsChannel }) {
 // listen for results on RabbitMQ
 listenForResults();
 
-server.listen(3000, function (err) {
+server.listen(PORT, function (err) {
     console.log(messageQueueConnectionString)
     if (err) {
         console.error(err);
     } else {
-        console.info("Listening on port %s.", 3000);
+        console.info("Listening on port %s.", PORT);
     }
 });

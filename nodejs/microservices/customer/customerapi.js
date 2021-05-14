@@ -1,5 +1,5 @@
 const path  = require('path');
-require('dotenv').config({path:  path.resolve(process.cwd(), '../.env')});
+require('dotenv').config({path:  path.resolve(process.cwd(), '../../.env')});
 
 const amqp = require('amqplib');
 
