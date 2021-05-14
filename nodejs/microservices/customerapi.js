@@ -72,12 +72,12 @@ function consume({ connection, channel, resultsChannel }) {
     });
 }
 
-// simulate data processing that takes 5 seconds
+// simulate data processing that takes 1 seconds
 function processMessage(requestData) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(requestData + "-processed")
-        }, 5000);
+        }, 1000);
     });
 }
 
