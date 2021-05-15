@@ -14,7 +14,7 @@ const getSingleProduct = function getSingleProduct(id) {
 
 const createProduct = function createProduct(product) {
     var productToReturn = null;
-    var doesProductExist = productData.findIndex((obj => obj.id == product));
+    var doesProductExist = productData.findIndex((obj => obj.id == product.id));
     if(doesProductExist == -1){
         productData.push(product);
         productToReturn = product;
@@ -35,7 +35,7 @@ const editProduct = function editProduct(id, product) {
 const deleteProduct = function deleteProduct(id) {
     var productToReturn = null;
     var productIndex = productData.findIndex((obj => obj.id == id));
-    if (productIndex > -1) {
+    if (productIndex != -1) {
         productToReturn = productData.splice(productIndex, 1);
       }
     return productToReturn;
