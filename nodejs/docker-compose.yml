@@ -1,18 +1,6 @@
 version: '3.4'
 
 services:
-  nodejs:
-    image: nodejs
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
-      CLOUDAMQP_URL: amqps://knonqsms:xhCosYXBsyLlHLadSlcUyzgfIz53B9AJ@rattlesnake.rmq.cloudamqp.com/knonqsms
-      PORT: 3000
-    ports:
-      - 3000:3000
-
   customer:
     image: customer
     build:
@@ -24,6 +12,8 @@ services:
         PORT: 3001
     ports:
         - 3001:3001
+    expose:
+        - 3001
 
   order:
     image: order
@@ -36,6 +26,8 @@ services:
         PORT: 3002
     ports:
         - 3002:3002
+    expose:
+        - 3002
 
   product:
     image: product
@@ -48,3 +40,5 @@ services:
         PORT: 3003
     ports:
         - 3003:3003
+    expose:
+        - 3003
