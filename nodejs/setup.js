@@ -14,15 +14,20 @@ async function setup() {
     let channel = await connection.createChannel();
 
     // create exchange
-    await channel.assertExchange("processing", "direct", { durable: true });
+    await channel.assertExchange("orders", "direct", { durable: true });
 
     // create queues
-    await channel.assertQueue("processing.requests", { durable: true });
-    await channel.assertQueue("processing.results", { durable: true });
+    await channel.assertQueue("orders.completed", { durable: true });
+    await channel.assertQueue("orders.cancelled", { durable: true });
+    await channel.assertQueue("orders.shipped", { durable: true });
+    await channel.assertQueue("orders.paid", { durable: true });
 
     // bind queues
-    await channel.bindQueue("processing.requests","processing", "request");
-    await channel.bindQueue("processing.results","processing", "result");
+    await channel.bindQueue("orders.paid","orders", "paid");
+    await channel.bindQueue("orders.cancelled","orders", "cancel");
+    await channel.bindQueue("orders.shipped","orders", "ship");
+    await channel.bindQueue("orders.completed","orders", "complete");
+
 
     console.log("Setup DONE");
     process.exit();

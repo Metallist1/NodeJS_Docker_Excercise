@@ -42,7 +42,7 @@ app.delete('/product/:id', function (req, res) {
 });
 
 // listen for results on RabbitMQ
-// listener.listenForMessages();
+ listener.listenForMessages();
 
 server.listen(PORT, function (err) {
     console.log(messageQueueConnectionString)

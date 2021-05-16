@@ -30,26 +30,58 @@ app.get('/order/:id', function(req, res) {
 app.post('/order', function (req, res) {
     let order = req.body;
     service.createOrder(order).then((value) => {
+
+        let requestId = order.customerId;
+        let requestData = order.orderLines;
+
+        listener.publishToChannel( { routingKey: "complete", exchangeName: "orders", data: { requestId, requestData } });
         res.send(value);
       });
 });
 
 app.put('/order/:id/pay', function (req, res) {
-    let order = service.getSingleOrder(req.params.id)
-    order.status = 'paid';
-    res.send(service.editOrder(req.params.id, order));
+    let order = service.getSingleOrder(req.params.id);
+    if(order != null){
+
+        let requestId = order.customerId;
+        let requestData = order.totalPrice;
+
+        listener.publishToChannel( { routingKey: "paid", exchangeName: "orders", data: { requestId, requestData } });
+        order.status = 'paid';
+        res.send(service.editOrder(req.params.id, order));
+    }else{
+        res.send('No order');
+    }
 });
 
 app.put('/order/:id/ship', function (req, res) {
-    let order = service.getSingleOrder(req.params.id)
-    order.status = 'shipped';
-    res.send(service.editOrder(req.params.id, order));
+    let order = service.getSingleOrder(req.params.id);
+    if(order != null){
+
+        let requestId = req.params.id;
+        let requestData = order.orderLines;
+
+        listener.publishToChannel( { routingKey: "ship", exchangeName: "orders", data: { requestId, requestData } });
+        order.status = 'shipped';
+        res.send(service.editOrder(req.params.id, order));
+    }else{
+        res.send('No order');
+    }
 });
 
 app.put('/order/:id/cancel', function (req, res) {
-    let order = service.getSingleOrder(req.params.id)
-    order.status = 'canceled';
-    res.send(service.editOrder(req.params.id, order));
+    let order = service.getSingleOrder(req.params.id);
+    if(order != null){
+
+        let requestId = req.params.id;
+        let requestData = order.orderLines;
+
+        listener.publishToChannel( { routingKey: "cancel", exchangeName: "orders", data: { requestId, requestData } });
+        order.status = 'canceled';
+        res.send(service.editOrder(req.params.id, order));
+    }else{
+        res.send('No order');
+    }
 });
 
 app.delete('/order/:id', function (req, res) {
@@ -57,7 +89,7 @@ app.delete('/order/:id', function (req, res) {
 });
 
 // listen for results on RabbitMQ
-// listener.listenForMessages();
+ // listener.listenForMessages();
 
 server.listen(PORT, function (err) {
     console.log(messageQueueConnectionString)
